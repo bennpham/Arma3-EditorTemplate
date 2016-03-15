@@ -1,0 +1,34 @@
+overviewPicture = "images\loadscreen.jpg";
+
+author="Phantom Six";
+loadScreen =  "images\loadscreen.jpg";
+OnLoadName = "PHT6 Mission Template";
+OnLoadMission = "This is a template.";
+debriefing = 1;
+
+allowFunctionsRecompile = 1;
+
+class Header
+{
+  gameType = Coop;
+  minPlayers = 1;
+  maxPlayers = 4;
+  playerCountMultipleOf = 1;
+};
+
+respawn = "SIDE"; 
+respawnDelay = 5;
+
+class CfgDebriefing
+{
+	#include "debriefing.hpp"
+};
+
+class RscTitles {
+	#include "ais_injury\dialogs\rscTitlesAIS.hpp"
+};
+
+class CfgFunctions {
+	#include "ais_injury\cfgFunctionsAIS.hpp"
+	#include "functions\common.hpp"
+};
