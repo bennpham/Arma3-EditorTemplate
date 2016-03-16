@@ -1,0 +1,22 @@
+OnLoadName = "PHT6 Mission Template";
+
+allowFunctionsRecompile = 1;
+
+class CfgDebriefing
+{
+	#include "debriefing.hpp"
+};
+
+class RscTitles {
+	#include "ais_injury\dialogs\rscTitlesAIS.hpp"
+};
+
+class CfgFunctions {
+	#include "ais_injury\cfgFunctionsAIS.hpp"
+	#include "functions\common.hpp"
+};
+
+class Params
+{
+	#include "scripts\parameters.hpp"
+};
