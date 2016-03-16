@@ -1,0 +1,12 @@
+OnLoadName = "PHT6 Mission Template";
+
+allowFunctionsRecompile = 1;
+
+class CfgDebriefing
+{
+	#include "debriefing.hpp"
+};
+
+class CfgFunctions {
+	#include "functions\common.hpp"
+};
