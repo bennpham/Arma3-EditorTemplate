@@ -1,0 +1,424 @@
+version=51;
+class EditorData
+{
+	moveGridStep=1;
+	angleGridStep=0.2617994;
+	scaleGridStep=1;
+	autoGroupingDist=10;
+	toggles=1;
+	class ItemIDProvider
+	{
+		nextID=29;
+	};
+	class MarkerIDProvider
+	{
+		nextID=3;
+	};
+	class Camera
+	{
+		pos[]={4000.2192,30,4274.6304};
+		dir[]={0.035225879,-0.72108507,0.69197971};
+		up[]={0.036660556,0.69284338,0.72015846};
+		aside[]={0.99872386,3.8211874e-007,-0.050842583};
+	};
+};
+binarizationWanted=0;
+addons[]=
+{
+	"A3_Weapons_F_Ammoboxes",
+	"A3_Soft_F_MRAP_02",
+	"A3_Characters_F_BLUFOR",
+	"a3_characters_f"
+};
+randomSeed=8376959;
+class ScenarioData
+{
+	author="Phantom Six";
+	overviewText="This is a template";
+	overViewPicture="images\loadscreen.jpg";
+	onLoadMission="This is a template";
+	loadScreen="images\loadscreen.jpg";
+	aIKills=1;
+	respawn=5;
+	class Header
+	{
+		gameType="Coop";
+		minPlayers=1;
+		maxPlayers=4;
+	};
+};
+class CustomAttributes
+{
+	class Category0
+	{
+		name="Multiplayer";
+		class Attribute0
+		{
+			property="RespawnButton";
+			expression="true";
+			class Value
+			{
+				class data
+				{
+					class type
+					{
+						type[]=
+						{
+							"SCALAR"
+						};
+					};
+					value=1;
+				};
+			};
+		};
+		class Attribute1
+		{
+			property="RespawnTemplates";
+			expression="true";
+			class Value
+			{
+				class data
+				{
+					class type
+					{
+						type[]=
+						{
+							"ARRAY"
+						};
+					};
+					class value
+					{
+						items=2;
+						class Item0
+						{
+							class data
+							{
+								class type
+								{
+									type[]=
+									{
+										"STRING"
+									};
+								};
+								value="EndMission";
+							};
+						};
+						class Item1
+						{
+							class data
+							{
+								class type
+								{
+									type[]=
+									{
+										"STRING"
+									};
+								};
+								value="SwitchPlayer";
+							};
+						};
+					};
+				};
+			};
+		};
+		nAttributes=2;
+	};
+	class Category1
+	{
+		name="Scenario";
+		class Attribute0
+		{
+			property="EnableDebugConsole";
+			expression="true";
+			class Value
+			{
+				class data
+				{
+					class type
+					{
+						type[]=
+						{
+							"SCALAR"
+						};
+					};
+					value=0;
+				};
+			};
+		};
+		nAttributes=1;
+	};
+};
+class Mission
+{
+	class Intel
+	{
+		overviewText="This is a template mission.";
+		startWeather=0;
+		startWind=0.099999994;
+		startWaves=0.099999994;
+		forecastWeather=0;
+		forecastWind=0.099999994;
+		forecastWaves=0.099999994;
+		forecastLightnings=0.099999994;
+		year=2035;
+		day=28;
+		hour=13;
+		minute=35;
+		startFogDecay=0.0049999999;
+		forecastFogDecay=0.0049999999;
+	};
+	class Entities
+	{
+		items=12;
+		class Item0
+		{
+			dataType="Marker";
+			position[]={3974.1785,5,4344.2114};
+			name="obj1";
+			text="obj1";
+			type="Empty";
+			id=0;
+		};
+		class Item1
+		{
+			dataType="Marker";
+			position[]={4020.7419,5,4343.3052};
+			name="obj2";
+			text="obj2";
+			type="Empty";
+			id=1;
+		};
+		class Item2
+		{
+			dataType="Trigger";
+			position[]={4013.1931,5,4273.4668};
+			class Attributes
+			{
+				text="End Mission When All Agony - SP";
+				condition="!isMultiplayer AND ({!(_x getVariable [""TCB_AIS_agony"", false]) } count switchableUnits) == 0";
+				onActivation="[[""end1"", false],""bis_fnc_endMission""] call bis_fnc_mp;";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={1,1,1};
+			};
+			id=3;
+			type="EmptyDetector";
+		};
+		class Item3
+		{
+			dataType="Trigger";
+			position[]={4017.5696,5,4273.6152};
+			class Attributes
+			{
+				text="End Mission When All Agony - MP";
+				condition="isMultiplayer AND ({!(_x getVariable [""TCB_AIS_agony"", false]) } count playableUnits) == 0";
+				onActivation="[[""end1"", false],""bis_fnc_endMission""] call bis_fnc_mp;";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={1,1,1};
+			};
+			id=4;
+			type="EmptyDetector";
+		};
+		class Item4
+		{
+			dataType="Trigger";
+			position[]={3989.8989,5,4273.0918};
+			class Attributes
+			{
+				text="VICTORY";
+				condition="[""task1"", ""task2""] call FHQ_fnc_ttAreTasksSuccessful";
+				onActivation="[""end2""] call bis_fnc_endMissionServer;";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={5,5,5};
+				interuptable=1;
+			};
+			id=5;
+			type="EmptyDetector";
+		};
+		class Item5
+		{
+			dataType="Trigger";
+			position[]={3974.771,5,4334.7749};
+			class Attributes
+			{
+				text="obj1 complete";
+				condition="!alive ammobox";
+				onActivation="[""task1"", ""succeeded""] call FHQ_fnc_ttSetTaskState;";
+				sizeA=0;
+				sizeB=0;
+				interuptable=1;
+			};
+			id=6;
+			type="EmptyDetector";
+		};
+		class Item6
+		{
+			dataType="Trigger";
+			position[]={4019.0491,5,4334.478};
+			class Attributes
+			{
+				text="obj2 complete";
+				condition="!alive ifrit";
+				onActivation="[""task2"", ""succeeded""] call FHQ_fnc_ttSetTaskState;";
+				sizeA=0;
+				sizeB=0;
+				interuptable=1;
+			};
+			id=7;
+			type="EmptyDetector";
+		};
+		class Item7
+		{
+			dataType="Trigger";
+			position[]={4014.0872,5,4265.563};
+			class Attributes
+			{
+				text="End Mission When All Dead - SP";
+				condition="!isMultiplayer AND (count switchableUnits) == 0";
+				onActivation="[[""end1"", false],""bis_fnc_endMission""] call bis_fnc_mp;";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={1,1,1};
+			};
+			id=8;
+			type="EmptyDetector";
+		};
+		class Item8
+		{
+			dataType="Trigger";
+			position[]={4018.4641,5,4265.7109};
+			class Attributes
+			{
+				text="End Mission When All Dead - MP";
+				condition="isMultiplayer AND (count playableUnits) == 0";
+				onActivation="[[""end1"", false],""bis_fnc_endMission""] call bis_fnc_mp;";
+				sizeA=0;
+				sizeB=0;
+				timeout[]={1,1,1};
+			};
+			id=9;
+			type="EmptyDetector";
+		};
+		class Item9
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={3974.2959,5.1887245,4342.9819};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=1;
+				name="ammobox";
+			};
+			id=10;
+			type="Box_East_Wps_F";
+		};
+		class Item10
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={4020.019,7.4435053,4343.2031};
+				angles[]={0,4.712389,0};
+			};
+			side="Empty";
+			class Attributes
+			{
+				skill=1;
+				name="ifrit";
+			};
+			id=11;
+			type="O_MRAP_02_F";
+		};
+		class Item11
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=4;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={4000.219,5.0014391,4299.6797};
+					};
+					side="West";
+					flags=2;
+					class Attributes
+					{
+						skill=1;
+						rank="SERGEANT";
+						name="p1";
+						isPlayer=1;
+						isPlayable=1;
+					};
+					id=13;
+					type="B_Soldier_TL_F";
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={3986.7229,5.0014391,4292.7246};
+					};
+					side="West";
+					class Attributes
+					{
+						skill=1;
+						rank="CORPORAL";
+						name="p2";
+						isPlayable=1;
+					};
+					id=14;
+					type="B_soldier_AR_F";
+				};
+				class Item2
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={4001.241,5.0014391,4285.9736};
+					};
+					side="West";
+					class Attributes
+					{
+						skill=1;
+						rank="CORPORAL";
+						name="p3";
+						isPlayable=1;
+					};
+					id=15;
+					type="B_soldier_M_F";
+				};
+				class Item3
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={4014.124,5.0014391,4292.3159};
+					};
+					side="West";
+					class Attributes
+					{
+						skill=1;
+						name="p4";
+						isPlayable=1;
+					};
+					id=16;
+					type="B_medic_F";
+				};
+			};
+			class Attributes
+			{
+			};
+			id=12;
+		};
+	};
+};
