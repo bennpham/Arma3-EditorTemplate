@@ -29,8 +29,6 @@ _unit setVariable ["tcb_ais_aisInit",true];
 	if (playerSide == _side) then {
 		if (_in_agony) then {
 			_unit playActionNow "agonyStart";
-			if (local player) then {[side _unit,"HQ"] sideChat format ["%1 is down and needs help at %2!",name _unit, mapGridPosition _unit]};
-			
 			if (isNil {_unit getVariable ["fa_action", Nil]}) then {
 				_fa_action = _unit addAction [format["<t color='#F00000'>First Aid to %1</t>",name _unit],{_this spawn tcb_fnc_firstAid},_unit,100,false,true,"",
 					"{not isNull (_target getVariable _x)} count ['healer','dragger'] == 0 && {alive _target} && {vehicle _target == _target}
