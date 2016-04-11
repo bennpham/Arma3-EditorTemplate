@@ -1,4 +1,4 @@
-/*%FSM<COMPILE "Z:\Programme\Steam\SteamApps\common\Arma 3 Tools\FSMEditor\scriptedFSM.cfg, ais">*/
+/*%FSM<COMPILE "C:\Program Files (x86)\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, ais">*/
 /*%FSM<HEAD>*/
 /*
 item0[] = {"start",0,250,-609.394836,-334.812927,-555.514771,-300.866486,0.000000,"start"};
@@ -82,734 +82,694 @@ link42[] = {31,34};
 link43[] = {32,33};
 link44[] = {33,24};
 link45[] = {34,4};
-globals[] = {0.000000,0,0,0,0,640,480,1,52,6316128,1,-626.941345,426.576294,472.782776,-620.303589,852,884,1};
-window[] = {2,-1,-1,-32000,-32000,893,156,1415,156,3,870};
+globals[] = {0.000000,0,0,0,0,640,480,1,52,6316128,1,-626.941345,426.576294,472.782776,-620.303589,852,910,1};
+window[] = {2,-1,-1,-1,-1,893,156,1415,156,3,870};
 *//*%FSM</HEAD>*/
 class FSM
 {
-        fsmName = "ais";
-        class States
+  fsmName = "ais";
+  class States
+  {
+    /*%FSM<STATE "start">*/
+    class start
+    {
+      name = "start";
+      init = /*%FSM<STATEINIT""">*/"private [""_unit"", ""_side"", ""_isplayable"",""_timenow2"", ""_pos"", ""_sleep2"", ""_parachute"",""_black_in""];" \n
+       "" \n
+       "_unit = _this select 0;" \n
+       "_side = side _unit;" \n
+       "" \n
+       "_isplayable =" \n
+       "	if (isMultiplayer) then {" \n
+       "		if (_unit in playableUnits) then {true} else {false};" \n
+       "	} else {" \n
+       "		if (_unit in switchableUnits) then {true} else {false};" \n
+       "	};" \n
+       "" \n
+       "" \n
+       "_unit setVariable [""dragger"", ObjNull, true];" \n
+       "_unit setVariable [""healer"", ObjNull, true];" \n
+       "_unit setVariable [""helper"", ObjNull, true];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
         {
-                /*%FSM<STATE "start">*/
-                class start
-                {
-                        name = "start";
-                        itemno = 0;
-                        init = /*%FSM<STATEINIT""">*/"private [""_unit"", ""_side"", ""_isplayable"",""_timenow2"", ""_pos"", ""_sleep2"", ""_parachute"",""_black_in""];" \n
-                         "" \n
-                         "_unit = _this select 0;" \n
-                         "_side = side _unit;" \n
-                         "" \n
-                         "_isplayable =" \n
-                         "	if (isMultiplayer) then {" \n
-                         "		if (_unit in playableUnits) then {true} else {false};" \n
-                         "	} else {" \n
-                         "		if (_unit in switchableUnits) then {true} else {false};" \n
-                         "	};" \n
-                         "" \n
-                         "" \n
-                         "_unit setVariable [""dragger"", ObjNull, true];" \n
-                         "_unit setVariable [""healer"", ObjNull, true];" \n
-                         "_unit setVariable [""helper"", ObjNull, true];"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "_">*/
-                                class _
-                                {
-                                        itemno = 1;
-                                        priority = 0.000000;
-                                        to="healthy";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "healthy">*/
-                class healthy
-                {
-                        name = "healthy";
-                        itemno = 2;
-                        init = /*%FSM<STATEINIT""">*/"_unit setVariable [""tcb_ais_side"", _side, true];" \n
-                         "_unit setVariable [""tcb_ais_unit_died"", false];" \n
-                         "_unit setVariable [""unit_is_unconscious"", false];" \n
-                         "" \n
-                         "_unit setVariable [""tcb_ais_agony"", false, true];" \n
-                         "_unit setCaptive false;" \n
-                         "" \n
-                         "" \n
-                         "//_unit setVariable [""tcb_ais_damageStore"", 0]; <-- no reset at this point!" \n
-                         "_unit setVariable [""tcb_ais_fall_in_agony_time_delay"", 999999];" \n
-                         "" \n
-                         "_unit setVariable [""tcb_ais_itemStorage"", [0,0]];" \n
-                         "_black_in = false;" \n
-                         "tcb_ais_unit_died = false;" \n
-                         "" \n
-                         "if (tcb_ais_toggleTFAR && {isPlayer _unit}) then {" \n
-                         "	[true] call tcb_fnc_toggleTFAR;" \n
-                         "};" \n
-                         "" \n
-                         "if (_unit getVariable ""tcb_ais_leader"" && {count units group _unit > 0} && {leader group _unit != _unit}) then {" \n
-                         "	(group _unit) selectLeader _unit;" \n
-                         "	[side _unit,""HQ""] sideChat format [""%1 take back the command!"", name _unit];" \n
-                         "};"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "dead">*/
-                                class dead
-                                {
-                                        itemno = 5;
-                                        priority = 100.000000;
-                                        to="die___clean_up";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "fall_in_agony">*/
-                                class fall_in_agony
-                                {
-                                        itemno = 3;
-                                        priority = 0.000000;
-                                        to="agony";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_agony"""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "agony">*/
-                class agony
-                {
-                        name = "agony";
-                        itemno = 4;
-                        init = /*%FSM<STATEINIT""">*/"//diag_log format [""agony inn in fsm - %1 --- %2"", _unit,time];" \n
-                         "" \n
-                         "if (!isNil {_dragger getVariable ""drop_action""}) then {" \n
-                         "	_dragger removeAction (_dragger getVariable ""drop_action"");" \n
-                         "	_dragger setVariable [""drop_action"",nil];" \n
-                         "};" \n
-                         "" \n
-                         "if (!isNull (_unit getVariable ""dragger"")) then {" \n
-                         "	if (!isPlayer _unit) then {_unit disableAI ""ANIM""};" \n
-                         "	_unit playMove ""AinjPpneMstpSnonWrflDb_release"";" \n
-                         "} else {" \n
-                         "	if (vehicle _unit == _unit) then {" \n
-                         "		_unit playActionNow ""agonyStart"";" \n
-                         "		if (_black_in && {_unit == player}) then {titleCut ["""",""BLACK IN"", 8]; _black_in = false};" \n
-                         "	};" \n
-                         "};" \n
-                         "_unit setVariable [""dragger"", ObjNull, true];" \n
-                         "_unit setVariable [""healer"", ObjNull, true];" \n
-                         "" \n
-                         "" \n
-                         "" \n
-                         "if (!(_unit getVariable ""unit_is_unconscious"")) then {" \n
-                         "	if (tcb_ais_bloodParticle) then {[_unit] call tcb_fnc_setBleeding};" \n
-                         "	tcb_ais_in_agony = [_unit,true];" \n
-                         "	publicVariable ""tcb_ais_in_agony"";" \n
-                         "	_unit setVariable [""unit_is_unconscious"", true];" \n
-                         "		" \n
-                         "	_unit setHit [""hands"",0.9];" \n
-                         "	_unit setHit [""legs"",0.9];" \n
-                         "	_unit setCaptive true;" \n
-                         "" \n
-                         "	if (_unit == player) then {" \n
-                         "		showHud false;" \n
-                         "		_unit execFSM (TCB_AIS_PATH+""fsm\bloodloss.fsm"");" \n
-                         "		_unit switchCamera ""INTERNAL"";" \n
-                         "	};" \n
-                         "	" \n
-                         "	[side _unit,""HQ""] sideChat format [""%1 is down and needs help at %2"",name _unit, mapGridPosition _unit];" \n
-                         "" \n
-                         "	if ({isPlayer _x} count (units group _unit) <= 2) then {" \n
-                         "		[_unit] spawn tcb_fnc_sendaihealer;" \n
-                         "	};" \n
-                         "	if (playerSide == _side) then {" \n
-                         "		[_unit] execFSM (TCB_AIS_PATH+""fsm\ais_marker.fsm"");" \n
-                         "	};" \n
-                         "	if (tcb_ais_toggleTFAR && {isPlayer _unit}) then {" \n
-                         "		[false] call tcb_fnc_toggleTFAR;" \n
-                         "	};" \n
-                         "" \n
-                         "		if(/*isServer && */_unit != player) then {" \n
-                         "			if (isNil {_unit getVariable [""fa_action"", Nil]}) then {" \n
-                         "				_fa_action = _unit addAction [format[""<t color='#F00000'>First Aid to %1</t>"",name _unit],{_this spawn tcb_fnc_firstAid},_unit,100,false,true,""""," \n
-                         "					""{not isNull (_target getVariable _x)} count ['healer','dragger'] == 0 && {alive _target} && {vehicle _target == _target}" \n
-                         "				""];" \n
-                         "				_unit setVariable [""fa_action"", _fa_action];" \n
-                         "			};" \n
-                         "			if (isNil {_unit getVariable [""drag_action"", Nil]}) then {" \n
-                         "				_drag_action = _unit addAction [format[""<t color='#FC9512'>Drag %1</t>"",name _unit],{_this spawn tcb_fnc_drag},_unit,99,false,true,""""," \n
-                         "					""{not isNull (_target getVariable _x)} count ['healer','dragger','helper'] == 0 && {alive _target} && {vehicle _target == _target}" \n
-                         "				""];" \n
-                         "				_unit setVariable [""drag_action"", _drag_action];" \n
-                         "			};" \n
-                         "			if (tcb_ais_medical_education >= 1) then {" \n
-                         "				if (isNil {_unit getVariable [""help_action"", Nil]}) then {" \n
-                         "					_help_action = _unit addAction [format[""<t color='#FC9512'>press on the wound</t>"",name _unit],{_this spawn tcb_fnc_help},_unit,98,false,true,""""," \n
-                         "						""{not isNull (_target getVariable _x)} count ['healer','dragger','helper'] == 0 && {alive _target} && {vehicle _target == _target}" \n
-                         "					""];" \n
-                         "					_unit setVariable [""help_action"", _help_action];" \n
-                         "				};" \n
-                         "			};" \n
-                         "		};" \n
-                         "" \n
-                         "	if (!isPlayer _unit) then {" \n
-                         "		_unit stop true;" \n
-                         "		_unit disableAI ""MOVE"";" \n
-                         "		_unit disableAI ""TARGET"";" \n
-                         "		_unit disableAI ""AUTOTARGET"";" \n
-                         "		_unit disableAI ""ANIM"";" \n
-                         "	};" \n
-                         "" \n
-                         "	_unit allowDamage true;" \n
-                         "" \n
-                         "	if (isPlayer _unit) then {" \n
-                         "		if (random 3 > 1) then {	//1/3 chance" \n
-                         "			_ran1 = [4,5,6,7,8,9] call BIS_fnc_selectRandom;" \n
-                         "			_ran2 = [1,2,3,4,5] call BIS_fnc_selectRandom;" \n
-                         "			_deathsound = format [""A3\sounds_f\characters\human-sfx\P0%1\Hit_Max_%2.wss"", _ran1, _ran2];" \n
-                         "			playSound3D [_deathsound, player, false, getPos player, 1, 1, 70];	// 70m" \n
-                         "		};" \n
-                         "	};" \n
-                         "" \n
-                         "" \n
-                         "	_unit addEventHandler [""fired"",{(_this select 0) setCaptive false}];" \n
-                         "	if (sunOrMoon == 0) then {" \n
-                         "		_unit action [""nvGogglesOff"",_unit];" \n
-                         "	};" \n
-                         "};" \n
-                         "" \n
-                         "if (surfaceIsWater [getPos _unit select 0, getPos _unit select 1]) then {" \n
-                         "	_unit setDamage 1;" \n
-                         "};" \n
-                         "" \n
-                         "disableUserInput false;"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "dead">*/
-                                class dead
-                                {
-                                        itemno = 5;
-                                        priority = 100.000000;
-                                        to="die___clean_up";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "healed">*/
-                                class healed
-                                {
-                                        itemno = 6;
-                                        priority = 50.000000;
-                                        to="un_anim";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"! (_unit getVariable ""tcb_ais_agony"")"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "dragged">*/
-                                class dragged
-                                {
-                                        itemno = 10;
-                                        priority = 10.000000;
-                                        to="drag_anim1";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"!isNull(_unit getVariable ""dragger"")"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "first_aid">*/
-                                class first_aid
-                                {
-                                        itemno = 13;
-                                        priority = 8.000000;
-                                        to="first_aid__anim";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"!isNull (_unit getVariable ""healer"")"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "has_firstaidkit">*/
-                                class has_firstaidkit
-                                {
-                                        itemno = 30;
-                                        priority = 2.000000;
-                                        to="remove_first_aid";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"(items _unit) find ""FirstAidKit"" >= 0		||" \n
-                                         "{(items _unit) find ""Medikit"" >= 0}"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "unit_in_vehicle">*/
-                                class unit_in_vehicle
-                                {
-                                        itemno = 22;
-                                        priority = 1.000000;
-                                        to="eject";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"vehicle _unit != _unit"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "die___clean_up">*/
-                class die___clean_up
-                {
-                        name = "die___clean_up";
-                        itemno = 7;
-                        init = /*%FSM<STATEINIT""">*/"if (alive _unit) then {_unit setDamage 1};" \n
-                         "" \n
-                         "_unit setVariable [""dragger"", ObjNull, true];" \n
-                         "_unit setVariable [""healer"", ObjNull,true];" \n
-                         "disableUserInput false;" \n
-                         " " \n
-                         "tcb_ais_in_agony = [_unit,false];" \n
-                         "publicVariable ""tcb_ais_in_agony"";" \n
-                         "if (tcb_ais_bloodParticle) then {[_unit] call tcb_fnc_resetBleeding};" \n
-                         "" \n
-                         "if (!isPlayer _unit) then {" \n
-                         "	_unit removeAction (_unit getVariable ""fa_action"");" \n
-                         "	_unit removeAction (_unit getVariable ""drag_action"");" \n
-                         "	_unit removeAction (_unit getVariable ""help_action"");" \n
-                         "	_unit setVariable [""fa_action"",nil];" \n
-                         "	_unit setVariable [""drag_action"",nil];" \n
-                         "	_unit setVariable [""help_action"",nil];" \n
-                         "" \n
-                         "" \n
-                         "	if (!isNil {_unit getVariable ""drag_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""drop_action"");" \n
-                         "		_unit setVariable [""drop_action"",nil];" \n
-                         "	};" \n
-                         "	if (!isNil {_unit getVariable ""carry_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""carry_action"");" \n
-                         "		_unit setVariable [""carry_action"",nil];" \n
-                         "	};" \n
-                         "	if (!isNil {_unit getVariable ""help_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""help_action"");" \n
-                         "		_unit setVariable [""help_action"",nil];" \n
-                         "	};" \n
-                         "	if (!isNil {_unit getVariable ""fa_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""fa_action"");" \n
-                         "		_unit setVariable [""fa_action"",nil];" \n
-                         "	};" \n
-                         "" \n
-                         "	_unit stop false;" \n
-                         "	_unit enableAI ""MOVE"";" \n
-                         "	_unit enableAI ""TARGET"";" \n
-                         "	_unit enableAI ""AUTOTARGET"";" \n
-                         "	_unit enableAI ""ANIM"";" \n
-                         "};" \n
-                         "" \n
-                         "detach _unit;" \n
-                         "_unit setVariable [""tcb_ais_agony"", false];" \n
-                         "_unit setVariable [""unit_is_unconscious"", false];" \n
-                         "_unit setCaptive false;" \n
-                         "_unit_is_in_vehicle = false;" \n
-                         "if (_unit == player) then {showHud true};" \n
-                         "" \n
-                         "_unit call tcb_fnc_restoreKits;"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "not_is_playable">*/
-                                class not_is_playable
-                                {
-                                        itemno = 27;
-                                        priority = 1.000000;
-                                        to="exit";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"not _isplayable"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "is_playable">*/
-                                class is_playable
-                                {
-                                        itemno = 8;
-                                        priority = 0.000000;
-                                        to="wait_for_respawn";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_isplayable"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "un_anim">*/
-                class un_anim
-                {
-                        name = "un_anim";
-                        itemno = 9;
-                        init = /*%FSM<STATEINIT""">*/"//diag_log format [""un-anim block in fsm - %1"", _unit];" \n
-                         "" \n
-                         "disableUserInput false;" \n
-                         "_unit playActionNow ""agonyStop"";" \n
-                         "" \n
-                         "" \n
-                         "tcb_ais_in_agony = [_unit,false];" \n
-                         "publicVariable ""tcb_ais_in_agony"";" \n
-                         "" \n
-                         "// reset damage/hits" \n
-                         "_unit setVariable [""tcb_ais_damageStore"", 0];" \n
-                         "{_unit setHit [_x,0]} forEach [""hands"",""legs"",""head"",""body""];" \n
-                         "" \n
-                         "[_unit] call tcb_fnc_resetBleeding;" \n
-                         "" \n
-                         "if (!isPlayer _unit) then {" \n
-                         "	_unit removeAction (_unit getVariable ""fa_action"");" \n
-                         "	_unit removeAction (_unit getVariable ""drag_action"");" \n
-                         "	_unit removeAction (_unit getVariable ""help_action"");" \n
-                         "	_unit setVariable [""fa_action"",nil];" \n
-                         "	_unit setVariable [""drag_action"",nil];" \n
-                         "	_unit setVariable [""help_action"",nil];" \n
-                         "" \n
-                         "" \n
-                         "	if (!isNil {_unit getVariable ""drag_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""drop_action"");" \n
-                         "		_unit setVariable [""drop_action"",nil];" \n
-                         "	};" \n
-                         "	if (!isNil {_unit getVariable ""carry_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""carry_action"");" \n
-                         "		_unit setVariable [""carry_action"",nil];" \n
-                         "	};" \n
-                         "	if (!isNil {_unit getVariable ""help_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""help_action"");" \n
-                         "		_unit setVariable [""help_action"",nil];" \n
-                         "	};" \n
-                         "	if (!isNil {_unit getVariable ""fa_action""}) then {" \n
-                         "		_unit removeAction (_unit getVariable ""fa_action"");" \n
-                         "		_unit setVariable [""fa_action"",nil];" \n
-                         "	};" \n
-                         "" \n
-                         "};" \n
-                         "detach _unit;" \n
-                         "_unit setCaptive false;" \n
-                         "if (_unit == player) then {showHud true};" \n
-                         "" \n
-                         "_unit call tcb_fnc_restoreKits;" \n
-                         "" \n
-                         "if (!isPlayer _unit) then {" \n
-                         "	_unit enableAI ""MOVE"";" \n
-                         "	_unit enableAI ""TARGET"";" \n
-                         "	_unit enableAI ""AUTOTARGET"";" \n
-                         "	_unit enableAI ""ANIM"";" \n
-                         "	_unit stop false;" \n
-                         "	_unit doMove (position (leader group _unit));" \n
-                         "" \n
-                         "	if ({isPlayer _x} count (units group _unit) <= 2) then {" \n
-                         "		[_unit] spawn tcb_fnc_lookingForWoundedMates;" \n
-                         "	};" \n
-                         "};"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "_">*/
-                                class _
-                                {
-                                        itemno = 1;
-                                        priority = 0.000000;
-                                        to="healthy";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "drag_anim1">*/
-                class drag_anim1
-                {
-                        name = "drag_anim1";
-                        itemno = 11;
-                        init = /*%FSM<STATEINIT""">*/"//diag_log format [""drag block in fsm - %1"", _unit];" \n
-                         "//if (!isPlayer _unit) then {_unit enableAI ""ANIM""};"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "dead">*/
-                                class dead
-                                {
-                                        itemno = 5;
-                                        priority = 100.000000;
-                                        to="die___clean_up";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "released">*/
-                                class released
-                                {
-                                        itemno = 12;
-                                        priority = 1.000000;
-                                        to="agony";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_dragger = _unit getVariable ""dragger"";" \n
-                                         "" \n
-                                         "isNull _dragger" \n
-                                         "" \n
-                                         "||" \n
-                                         "" \n
-                                         "{!alive _dragger}" \n
-                                         ""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "first_aid__anim">*/
-                class first_aid__anim
-                {
-                        name = "first_aid__anim";
-                        itemno = 15;
-                        init = /*%FSM<STATEINIT""">*/"_unit playMove ""AinjPpneMstpSnonWrflDnon_rolltoback"";" \n
-                         "//diag_log format [""first aid block in fsm - %1"", _unit];"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "dead">*/
-                                class dead
-                                {
-                                        itemno = 5;
-                                        priority = 100.000000;
-                                        to="die___clean_up";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "fa_finish">*/
-                                class fa_finish
-                                {
-                                        itemno = 14;
-                                        priority = 1.000000;
-                                        to="agony";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_healer = _unit getVariable ""healer"";" \n
-                                         "" \n
-                                         "isNull _healer" \n
-                                         "" \n
-                                         "||" \n
-                                         "" \n
-                                         "{!alive _healer}"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "anim_left_in_err">*/
-                                class anim_left_in_err
-                                {
-                                        itemno = 21;
-                                        priority = 0.000000;
-                                        to="first_aid__anim";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"animationState _unit != ""ainjppnemstpsnonwrfldnon""				&&" \n
-                                         "animationState _unit != ""ainjppnemstpsnonwrfldnon_rolltoback""	&&" \n
-                                         "_unit getVariable ""tcb_ais_agony"""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "eject">*/
-                class eject
-                {
-                        name = "eject";
-                        itemno = 23;
-                        init = /*%FSM<STATEINIT""">*/"if (typeOf vehicle _unit == ""Steerable_Parachute_F"") then {" \n
-                         "	_parachute = true;" \n
-                         "	unAssignVehicle _unit;" \n
-                         "	_unit action [""eject"", vehicle _unit];" \n
-                         "	if (_unit == player) then {titleCut ["""",""BLACK OUT"", 2]};" \n
-                         "" \n
-                         "} else {" \n
-                         "	_parachute = false;" \n
-                         "	unAssignVehicle _unit;" \n
-                         "	_unit action [""eject"", vehicle _unit];" \n
-                         "	_ran_damage = 0.5 + random 0.4;" \n
-                         "	_sleep2 = time + 2;" \n
-                         "};" \n
-                         "" \n
-                         "//diag_log format [""eject in fsm - %1"", time];"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "dead">*/
-                                class dead
-                                {
-                                        itemno = 5;
-                                        priority = 100.000000;
-                                        to="die___clean_up";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "parachute">*/
-                                class parachute
-                                {
-                                        itemno = 32;
-                                        priority = 1.000000;
-                                        to="handle_Parachute";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"_parachute"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                                /*%FSM<LINK "ejected">*/
-                                class ejected
-                                {
-                                        itemno = 24;
-                                        priority = 0.000000;
-                                        to="agony";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"vehicle _unit == _unit && {time > _sleep2} && {!_parachute}"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "wait_for_respawn">*/
-                class wait_for_respawn
-                {
-                        name = "wait_for_respawn";
-                        itemno = 25;
-                        init = /*%FSM<STATEINIT""">*/"_name_unit = name _unit;"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "alive_again">*/
-                                class alive_again
-                                {
-                                        itemno = 26;
-                                        priority = 0.000000;
-                                        to="set_Entity";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"{_name_unit == name _x && alive _x} count playableUnits > 0"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "exit">*/
-                class exit
-                {
-                        name = "exit";
-                        itemno = 28;
-                        init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "set_Entity">*/
-                class set_Entity
-                {
-                        name = "set_Entity";
-                        itemno = 29;
-                        init = /*%FSM<STATEINIT""">*/"{" \n
-                         "	if (name _x == _name_unit) exitWith {_unit = _x};" \n
-                         "} foreach playableUnits;" \n
-                         "" \n
-                         "_unit setVariable [""tcb_ais_damageStore"", 0]; // only reset after the unit was dead" \n
-                         "" \n
-                         "if (tcb_ais_toggleTFAR && {isPlayer _unit}) then {" \n
-                         "	[true] call tcb_fnc_toggleTFAR;" \n
-                         "};"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "_">*/
-                                class _
-                                {
-                                        itemno = 1;
-                                        priority = 0.000000;
-                                        to="healthy";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "remove_first_aid">*/
-                class remove_first_aid
-                {
-                        name = "remove_first_aid";
-                        itemno = 31;
-                        init = /*%FSM<STATEINIT""">*/"//diag_log format [""remove kit block in fsm - %1"", _unit];" \n
-                         "" \n
-                         "_unit call tcb_fnc_removeKits;"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "_">*/
-                                class _
-                                {
-                                        itemno = 34;
-                                        priority = 0.000000;
-                                        to="agony";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
-                /*%FSM<STATE "handle_Parachute">*/
-                class handle_Parachute
-                {
-                        name = "handle_Parachute";
-                        itemno = 33;
-                        init = /*%FSM<STATEINIT""">*/"_unit setDamage ((damage _unit) max (0.5 + random 0.4));" \n
-                         "_parachute = false;" \n
-                         "_sleep2 = time + 6.5;" \n
-                         "_black_in = true;" \n
-                         "" \n
-                         "//diag_log format [""parachute - %1"", time];"/*%FSM</STATEINIT""">*/;
-                        precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
-                        class Links
-                        {
-                                /*%FSM<LINK "ejected">*/
-                                class ejected
-                                {
-                                        itemno = 24;
-                                        priority = 0.000000;
-                                        to="agony";
-                                        precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-                                        condition=/*%FSM<CONDITION""">*/"vehicle _unit == _unit && {time > _sleep2} && {!_parachute}"/*%FSM</CONDITION""">*/;
-                                        action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
-                                };
-                                /*%FSM</LINK>*/
-                        };
-                };
-                /*%FSM</STATE>*/
+          priority = 0.000000;
+          to="healthy";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
-        initState="start";
-        finalStates[] =
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "healthy">*/
+    class healthy
+    {
+      name = "healthy";
+      init = /*%FSM<STATEINIT""">*/"_unit setVariable [""tcb_ais_side"", _side, true];" \n
+       "_unit setVariable [""tcb_ais_unit_died"", false];" \n
+       "_unit setVariable [""unit_is_unconscious"", false];" \n
+       "" \n
+       "_unit setVariable [""tcb_ais_agony"", false, true];" \n
+       "_unit setCaptive false;" \n
+       "" \n
+       "" \n
+       "//_unit setVariable [""tcb_ais_damageStore"", 0]; <-- no reset at this point!" \n
+       "_unit setVariable [""tcb_ais_fall_in_agony_time_delay"", 999999];" \n
+       "" \n
+       "_unit setVariable [""tcb_ais_itemStorage"", [0,0]];" \n
+       "_black_in = false;" \n
+       "tcb_ais_unit_died = false;" \n
+       "" \n
+       "if (tcb_ais_toggleTFAR && {isPlayer _unit}) then {" \n
+       "	[true] call tcb_fnc_toggleTFAR;" \n
+       "};" \n
+       "" \n
+       "if (_unit getVariable ""tcb_ais_leader"" && {count units group _unit > 0} && {leader group _unit != _unit}) then {" \n
+       "	(group _unit) selectLeader _unit;" \n
+       "};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "dead">*/
+        class dead
         {
-                "exit",
+          priority = 100.000000;
+          to="die___clean_up";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "fall_in_agony">*/
+        class fall_in_agony
+        {
+          priority = 0.000000;
+          to="agony";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_agony"""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "agony">*/
+    class agony
+    {
+      name = "agony";
+      init = /*%FSM<STATEINIT""">*/"//diag_log format [""agony inn in fsm - %1 --- %2"", _unit,time];" \n
+       "" \n
+       "if (!isNil {_dragger getVariable ""drop_action""}) then {" \n
+       "	_dragger removeAction (_dragger getVariable ""drop_action"");" \n
+       "	_dragger setVariable [""drop_action"",nil];" \n
+       "};" \n
+       "" \n
+       "if (!isNull (_unit getVariable ""dragger"")) then {" \n
+       "	if (!isPlayer _unit) then {_unit disableAI ""ANIM""};" \n
+       "	_unit playMove ""AinjPpneMstpSnonWrflDb_release"";" \n
+       "} else {" \n
+       "	if (vehicle _unit == _unit) then {" \n
+       "		_unit playActionNow ""agonyStart"";" \n
+       "		if (_black_in && {_unit == player}) then {titleCut ["""",""BLACK IN"", 8]; _black_in = false};" \n
+       "	};" \n
+       "};" \n
+       "_unit setVariable [""dragger"", ObjNull, true];" \n
+       "_unit setVariable [""healer"", ObjNull, true];" \n
+       "" \n
+       "" \n
+       "" \n
+       "if (!(_unit getVariable ""unit_is_unconscious"")) then {" \n
+       "	if (tcb_ais_bloodParticle) then {[_unit] call tcb_fnc_setBleeding};" \n
+       "	tcb_ais_in_agony = [_unit,true];" \n
+       "	publicVariable ""tcb_ais_in_agony"";" \n
+       "	_unit setVariable [""unit_is_unconscious"", true];" \n
+       "		" \n
+       "	_unit setHit [""hands"",0.9];" \n
+       "	_unit setHit [""legs"",0.9];" \n
+       "	_unit setCaptive true;" \n
+       "" \n
+       "	if (_unit == player) then {" \n
+       "		showHud false;" \n
+       "		_unit execFSM (TCB_AIS_PATH+""fsm\bloodloss.fsm"");" \n
+       "		_unit switchCamera ""INTERNAL"";" \n
+       "	};" \n
+       "" \n
+       "	if ({isPlayer _x} count (units group _unit) <= 2) then {" \n
+       "		[_unit] spawn tcb_fnc_sendaihealer;" \n
+       "	};" \n
+       "	if (playerSide == _side) then {" \n
+       "		[_unit] execFSM (TCB_AIS_PATH+""fsm\ais_marker.fsm"");" \n
+       "	};" \n
+       "	if (tcb_ais_toggleTFAR && {isPlayer _unit}) then {" \n
+       "		[false] call tcb_fnc_toggleTFAR;" \n
+       "	};" \n
+       "" \n
+       "		if(/*isServer && */_unit != player) then {" \n
+       "			if (isNil {_unit getVariable [""fa_action"", Nil]}) then {" \n
+       "				_fa_action = _unit addAction [format[""<t color='#F00000'>First Aid to %1</t>"",name _unit],{_this spawn tcb_fnc_firstAid},_unit,100,false,true,""""," \n
+       "					""{not isNull (_target getVariable _x)} count ['healer','dragger'] == 0 && {alive _target} && {vehicle _target == _target}" \n
+       "				""];" \n
+       "				_unit setVariable [""fa_action"", _fa_action];" \n
+       "			};" \n
+       "			if (isNil {_unit getVariable [""drag_action"", Nil]}) then {" \n
+       "				_drag_action = _unit addAction [format[""<t color='#FC9512'>Drag %1</t>"",name _unit],{_this spawn tcb_fnc_drag},_unit,99,false,true,""""," \n
+       "					""{not isNull (_target getVariable _x)} count ['healer','dragger','helper'] == 0 && {alive _target} && {vehicle _target == _target}" \n
+       "				""];" \n
+       "				_unit setVariable [""drag_action"", _drag_action];" \n
+       "			};" \n
+       "			if (tcb_ais_medical_education >= 1) then {" \n
+       "				if (isNil {_unit getVariable [""help_action"", Nil]}) then {" \n
+       "					_help_action = _unit addAction [format[""<t color='#FC9512'>press on the wound</t>"",name _unit],{_this spawn tcb_fnc_help},_unit,98,false,true,""""," \n
+       "						""{not isNull (_target getVariable _x)} count ['healer','dragger','helper'] == 0 && {alive _target} && {vehicle _target == _target}" \n
+       "					""];" \n
+       "					_unit setVariable [""help_action"", _help_action];" \n
+       "				};" \n
+       "			};" \n
+       "		};" \n
+       "" \n
+       "	if (!isPlayer _unit) then {" \n
+       "		_unit stop true;" \n
+       "		_unit disableAI ""MOVE"";" \n
+       "		_unit disableAI ""TARGET"";" \n
+       "		_unit disableAI ""AUTOTARGET"";" \n
+       "		_unit disableAI ""ANIM"";" \n
+       "	};" \n
+       "" \n
+       "	_unit allowDamage true;" \n
+       "" \n
+       "	if (isPlayer _unit) then {" \n
+       "		if (random 3 > 1) then {	//1/3 chance" \n
+       "			_ran1 = [4,5,6,7,8,9] call BIS_fnc_selectRandom;" \n
+       "			_ran2 = [1,2,3,4,5] call BIS_fnc_selectRandom;" \n
+       "			_deathsound = format [""A3\sounds_f\characters\human-sfx\P0%1\Hit_Max_%2.wss"", _ran1, _ran2];" \n
+       "			playSound3D [_deathsound, player, false, getPos player, 1, 1, 70];	// 70m" \n
+       "		};" \n
+       "	};" \n
+       "" \n
+       "" \n
+       "	_unit addEventHandler [""fired"",{(_this select 0) setCaptive false}];" \n
+       "	if (sunOrMoon == 0) then {" \n
+       "		_unit action [""nvGogglesOff"",_unit];" \n
+       "	};" \n
+       "};" \n
+       "" \n
+       "if (surfaceIsWater [getPos _unit select 0, getPos _unit select 1]) then {" \n
+       "	_unit setDamage 1;" \n
+       "};" \n
+       "" \n
+       "disableUserInput false;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "dead">*/
+        class dead
+        {
+          priority = 100.000000;
+          to="die___clean_up";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "healed">*/
+        class healed
+        {
+          priority = 50.000000;
+          to="un_anim";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"! (_unit getVariable ""tcb_ais_agony"")"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "dragged">*/
+        class dragged
+        {
+          priority = 10.000000;
+          to="drag_anim1";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"!isNull(_unit getVariable ""dragger"")"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "first_aid">*/
+        class first_aid
+        {
+          priority = 8.000000;
+          to="first_aid__anim";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"!isNull (_unit getVariable ""healer"")"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "has_firstaidkit">*/
+        class has_firstaidkit
+        {
+          priority = 2.000000;
+          to="remove_first_aid";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(items _unit) find ""FirstAidKit"" >= 0		||" \n
+           "{(items _unit) find ""Medikit"" >= 0}"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "unit_in_vehicle">*/
+        class unit_in_vehicle
+        {
+          priority = 1.000000;
+          to="eject";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"vehicle _unit != _unit"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "die___clean_up">*/
+    class die___clean_up
+    {
+      name = "die___clean_up";
+      init = /*%FSM<STATEINIT""">*/"if (alive _unit) then {_unit setDamage 1};" \n
+       "" \n
+       "_unit setVariable [""dragger"", ObjNull, true];" \n
+       "_unit setVariable [""healer"", ObjNull,true];" \n
+       "disableUserInput false;" \n
+       " " \n
+       "tcb_ais_in_agony = [_unit,false];" \n
+       "publicVariable ""tcb_ais_in_agony"";" \n
+       "if (tcb_ais_bloodParticle) then {[_unit] call tcb_fnc_resetBleeding};" \n
+       "" \n
+       "if (!isPlayer _unit) then {" \n
+       "	_unit removeAction (_unit getVariable ""fa_action"");" \n
+       "	_unit removeAction (_unit getVariable ""drag_action"");" \n
+       "	_unit removeAction (_unit getVariable ""help_action"");" \n
+       "	_unit setVariable [""fa_action"",nil];" \n
+       "	_unit setVariable [""drag_action"",nil];" \n
+       "	_unit setVariable [""help_action"",nil];" \n
+       "" \n
+       "" \n
+       "	if (!isNil {_unit getVariable ""drag_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""drop_action"");" \n
+       "		_unit setVariable [""drop_action"",nil];" \n
+       "	};" \n
+       "	if (!isNil {_unit getVariable ""carry_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""carry_action"");" \n
+       "		_unit setVariable [""carry_action"",nil];" \n
+       "	};" \n
+       "	if (!isNil {_unit getVariable ""help_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""help_action"");" \n
+       "		_unit setVariable [""help_action"",nil];" \n
+       "	};" \n
+       "	if (!isNil {_unit getVariable ""fa_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""fa_action"");" \n
+       "		_unit setVariable [""fa_action"",nil];" \n
+       "	};" \n
+       "" \n
+       "	_unit stop false;" \n
+       "	_unit enableAI ""MOVE"";" \n
+       "	_unit enableAI ""TARGET"";" \n
+       "	_unit enableAI ""AUTOTARGET"";" \n
+       "	_unit enableAI ""ANIM"";" \n
+       "};" \n
+       "" \n
+       "detach _unit;" \n
+       "_unit setVariable [""tcb_ais_agony"", false];" \n
+       "_unit setVariable [""unit_is_unconscious"", false];" \n
+       "_unit setCaptive false;" \n
+       "_unit_is_in_vehicle = false;" \n
+       "if (_unit == player) then {showHud true};" \n
+       "" \n
+       "_unit call tcb_fnc_restoreKits;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "not_is_playable">*/
+        class not_is_playable
+        {
+          priority = 1.000000;
+          to="exit";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"not _isplayable"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "is_playable">*/
+        class is_playable
+        {
+          priority = 0.000000;
+          to="wait_for_respawn";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_isplayable"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "un_anim">*/
+    class un_anim
+    {
+      name = "un_anim";
+      init = /*%FSM<STATEINIT""">*/"//diag_log format [""un-anim block in fsm - %1"", _unit];" \n
+       "" \n
+       "disableUserInput false;" \n
+       "_unit playActionNow ""agonyStop"";" \n
+       "" \n
+       "" \n
+       "tcb_ais_in_agony = [_unit,false];" \n
+       "publicVariable ""tcb_ais_in_agony"";" \n
+       "" \n
+       "// reset damage/hits" \n
+       "_unit setVariable [""tcb_ais_damageStore"", 0];" \n
+       "{_unit setHit [_x,0]} forEach [""hands"",""legs"",""head"",""body""];" \n
+       "" \n
+       "[_unit] call tcb_fnc_resetBleeding;" \n
+       "" \n
+       "if (!isPlayer _unit) then {" \n
+       "	_unit removeAction (_unit getVariable ""fa_action"");" \n
+       "	_unit removeAction (_unit getVariable ""drag_action"");" \n
+       "	_unit removeAction (_unit getVariable ""help_action"");" \n
+       "	_unit setVariable [""fa_action"",nil];" \n
+       "	_unit setVariable [""drag_action"",nil];" \n
+       "	_unit setVariable [""help_action"",nil];" \n
+       "" \n
+       "" \n
+       "	if (!isNil {_unit getVariable ""drag_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""drop_action"");" \n
+       "		_unit setVariable [""drop_action"",nil];" \n
+       "	};" \n
+       "	if (!isNil {_unit getVariable ""carry_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""carry_action"");" \n
+       "		_unit setVariable [""carry_action"",nil];" \n
+       "	};" \n
+       "	if (!isNil {_unit getVariable ""help_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""help_action"");" \n
+       "		_unit setVariable [""help_action"",nil];" \n
+       "	};" \n
+       "	if (!isNil {_unit getVariable ""fa_action""}) then {" \n
+       "		_unit removeAction (_unit getVariable ""fa_action"");" \n
+       "		_unit setVariable [""fa_action"",nil];" \n
+       "	};" \n
+       "" \n
+       "};" \n
+       "detach _unit;" \n
+       "_unit setCaptive false;" \n
+       "if (_unit == player) then {showHud true};" \n
+       "" \n
+       "_unit call tcb_fnc_restoreKits;" \n
+       "" \n
+       "if (!isPlayer _unit) then {" \n
+       "	_unit enableAI ""MOVE"";" \n
+       "	_unit enableAI ""TARGET"";" \n
+       "	_unit enableAI ""AUTOTARGET"";" \n
+       "	_unit enableAI ""ANIM"";" \n
+       "	_unit stop false;" \n
+       "	_unit doMove (position (leader group _unit));" \n
+       "" \n
+       "	if ({isPlayer _x} count (units group _unit) <= 2) then {" \n
+       "		[_unit] spawn tcb_fnc_lookingForWoundedMates;" \n
+       "	};" \n
+       "};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="healthy";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "drag_anim1">*/
+    class drag_anim1
+    {
+      name = "drag_anim1";
+      init = /*%FSM<STATEINIT""">*/"//diag_log format [""drag block in fsm - %1"", _unit];" \n
+       "//if (!isPlayer _unit) then {_unit enableAI ""ANIM""};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "dead">*/
+        class dead
+        {
+          priority = 100.000000;
+          to="die___clean_up";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "released">*/
+        class released
+        {
+          priority = 1.000000;
+          to="agony";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_dragger = _unit getVariable ""dragger"";" \n
+           "" \n
+           "isNull _dragger" \n
+           "" \n
+           "||" \n
+           "" \n
+           "{!alive _dragger}" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "first_aid__anim">*/
+    class first_aid__anim
+    {
+      name = "first_aid__anim";
+      init = /*%FSM<STATEINIT""">*/"_unit playMove ""AinjPpneMstpSnonWrflDnon_rolltoback"";" \n
+       "//diag_log format [""first aid block in fsm - %1"", _unit];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "dead">*/
+        class dead
+        {
+          priority = 100.000000;
+          to="die___clean_up";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "fa_finish">*/
+        class fa_finish
+        {
+          priority = 1.000000;
+          to="agony";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_healer = _unit getVariable ""healer"";" \n
+           "" \n
+           "isNull _healer" \n
+           "" \n
+           "||" \n
+           "" \n
+           "{!alive _healer}"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "anim_left_in_err">*/
+        class anim_left_in_err
+        {
+          priority = 0.000000;
+          to="first_aid__anim";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"animationState _unit != ""ainjppnemstpsnonwrfldnon""				&&" \n
+           "animationState _unit != ""ainjppnemstpsnonwrfldnon_rolltoback""	&&" \n
+           "_unit getVariable ""tcb_ais_agony"""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "eject">*/
+    class eject
+    {
+      name = "eject";
+      init = /*%FSM<STATEINIT""">*/"if (typeOf vehicle _unit == ""Steerable_Parachute_F"") then {" \n
+       "	_parachute = true;" \n
+       "	unAssignVehicle _unit;" \n
+       "	_unit action [""eject"", vehicle _unit];" \n
+       "	if (_unit == player) then {titleCut ["""",""BLACK OUT"", 2]};" \n
+       "" \n
+       "} else {" \n
+       "	_parachute = false;" \n
+       "	unAssignVehicle _unit;" \n
+       "	_unit action [""eject"", vehicle _unit];" \n
+       "	_ran_damage = 0.5 + random 0.4;" \n
+       "	_sleep2 = time + 2;" \n
+       "};" \n
+       "" \n
+       "//diag_log format [""eject in fsm - %1"", time];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "dead">*/
+        class dead
+        {
+          priority = 100.000000;
+          to="die___clean_up";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_unit getVariable ""tcb_ais_unit_died"" || not alive _unit"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "parachute">*/
+        class parachute
+        {
+          priority = 1.000000;
+          to="handle_Parachute";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_parachute"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "ejected">*/
+        class ejected
+        {
+          priority = 0.000000;
+          to="agony";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"vehicle _unit == _unit && {time > _sleep2} && {!_parachute}"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "wait_for_respawn">*/
+    class wait_for_respawn
+    {
+      name = "wait_for_respawn";
+      init = /*%FSM<STATEINIT""">*/"_name_unit = name _unit;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "alive_again">*/
+        class alive_again
+        {
+          priority = 0.000000;
+          to="set_Entity";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"{_name_unit == name _x && alive _x} count playableUnits > 0"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "exit">*/
+    class exit
+    {
+      name = "exit";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "set_Entity">*/
+    class set_Entity
+    {
+      name = "set_Entity";
+      init = /*%FSM<STATEINIT""">*/"{" \n
+       "	if (name _x == _name_unit) exitWith {_unit = _x};" \n
+       "} foreach playableUnits;" \n
+       "" \n
+       "_unit setVariable [""tcb_ais_damageStore"", 0]; // only reset after the unit was dead" \n
+       "" \n
+       "if (tcb_ais_toggleTFAR && {isPlayer _unit}) then {" \n
+       "	[true] call tcb_fnc_toggleTFAR;" \n
+       "};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="healthy";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "remove_first_aid">*/
+    class remove_first_aid
+    {
+      name = "remove_first_aid";
+      init = /*%FSM<STATEINIT""">*/"//diag_log format [""remove kit block in fsm - %1"", _unit];" \n
+       "" \n
+       "_unit call tcb_fnc_removeKits;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="agony";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "handle_Parachute">*/
+    class handle_Parachute
+    {
+      name = "handle_Parachute";
+      init = /*%FSM<STATEINIT""">*/"_unit setDamage ((damage _unit) max (0.5 + random 0.4));" \n
+       "_parachute = false;" \n
+       "_sleep2 = time + 6.5;" \n
+       "_black_in = true;" \n
+       "" \n
+       "//diag_log format [""parachute - %1"", time];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "ejected">*/
+        class ejected
+        {
+          priority = 0.000000;
+          to="agony";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"vehicle _unit == _unit && {time > _sleep2} && {!_parachute}"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="start";
+  finalStates[] =
+  {
+    "exit",
+  };
 };
 /*%FSM</COMPILE>*/
