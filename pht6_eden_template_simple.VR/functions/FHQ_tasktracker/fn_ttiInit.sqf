@@ -1,8 +1,8 @@
 /* Internal function, called automatically */
-
 FHQ_TT_subtaskPrefix = " > ";
 FHQ_TTI_supressTaskHints = true;
-FHQ_TTI_is_arma3 = false;
+FHQ_TTI_is_arma3 = true;
+FHQ_TTI_version = productVersion select 2;
 
 if (isClass (configfile >> "CfgAddons" >> "PreloadAddons" >> "A3")) then {
     FHQ_TTI_is_arma3 = true;

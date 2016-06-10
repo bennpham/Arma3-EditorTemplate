@@ -5,9 +5,9 @@
 #define FHQ_TTIF_TASKTARGET	4
 #define FHQ_TTIF_TASKSTATE	5
 
-private ["_task", "_name"];
+private _name = "";
 
-_task = _this select FHQ_TTIF_TASKNAME;
+private _task = _this select FHQ_TTIF_TASKNAME;
 if (typename _task == "ARRAY") then 
 {
    	_name = _task select 0;

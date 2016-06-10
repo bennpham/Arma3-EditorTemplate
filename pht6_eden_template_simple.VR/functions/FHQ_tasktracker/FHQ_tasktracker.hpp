@@ -9,6 +9,12 @@
 			preInit = 1;
 		};
 
+		class ttiPostInit
+		{
+			description = "Internal function, called automatically";
+			postInit = 1;
+		};
+
 		INTERNAL_FUNCTION(ttifilterUnits)
 		INTERNAL_FUNCTION(ttiAddBriefingEntry)
 		INTERNAL_FUNCTION(ttiHasBriefingEntry)
@@ -20,9 +26,16 @@
 		INTERNAL_FUNCTION(ttiGetTaskTarget)
 		INTERNAL_FUNCTION(ttiGetTaskState)
 		INTERNAL_FUNCTION(ttiGetTaskName)
+		INTERNAL_FUNCTION(ttiGetTaskType)
 		INTERNAL_FUNCTION(ttiTaskExists)
 		INTERNAL_FUNCTION(ttiCreateOrUpdateTask)
 		INTERNAL_FUNCTION(ttiUpdateTaskList)
+		INTERNAL_FUNCTION(ttiMissionTasks)
+		INTERNAL_FUNCTION(ttiMissionBriefing)
+		INTERNAL_FUNCTION(ttiUnitTasks)
+		INTERNAL_FUNCTION(ttiUnitBriefing)
+		INTERNAL_FUNCTION(ttiIsFilter)
+		INTERNAL_FUNCTION(ttiIsTaskState)
 	};
 
 	class TaskTracker {

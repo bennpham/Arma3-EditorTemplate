@@ -42,18 +42,17 @@
  * NOTE: This function can only be called on the server. Calling it anywhere else will have no effect. 
  */
  
-private ["_currentFilter", "_i", "_current",  "_newTask"];
-_currentFilter = {true};
-    
+private _currentFilter = {true};
+     
 if (isServer) then {
     /* Note: Server only code. Briefing entries must be added on the server, not on an
      * individual client
      */
-         
+	private _i = 0; 
    	for [{_i = 0}, {_i < count _this}, {_i = _i + 1}] do {
 		
-      	_current = _this select _i;
-        if (typename _current != "ARRAY") then {
+      	private _current = _this select _i;
+        if (_current call FHQ_fnc_ttiIsFilter) then {
             /* Must be a filter */
             _currentFilter = nil; 
             _currentFilter = _current;
@@ -63,14 +62,16 @@ if (isServer) then {
              * task entry with all redundant information filled in for easier 
              * access later on
              */
-           	_name = _current call FHQ_fnc_ttiGetTaskName;
+           	private _name = _current call FHQ_fnc_ttiGetTaskName;
             if (([FHQ_TTI_TaskList, _name] call FHQ_fnc_ttiTaskExists) == -1) then {
-                _newTask = [_current call FHQ_fnc_ttiGetTaskId,
+                private _newTask = 
+                           [_current call FHQ_fnc_ttiGetTaskId,
                             _current call FHQ_fnc_ttiGetTaskDesc,
                             _current call FHQ_fnc_ttiGetTaskTitle,
                             _current call FHQ_fnc_ttiGetTaskWp,
                             _current call FHQ_fnc_ttiGetTaskTarget,
-                            _current call FHQ_fnc_ttiGetTaskState];
+                            _current call FHQ_fnc_ttiGetTaskState,
+                            _current call FHQ_fnc_ttiGetTaskType];
                 FHQ_TTI_TaskList = FHQ_TTI_TaskList + [[_currentFilter, _newTask]]; 
 			};
 		};

@@ -1,42 +1,41 @@
-_tasks = _this;
-    
-{
-    _list = [];
-   	for [{_i = 0}, {_i < count _tasks}, {_i = _i + 1}] do {
-        _current = _tasks select _i;		// [_filter, [_section, _subject, _text]]
+private _tasks = _this;
+private _i = 0;
 
-        _filter = _current select 0;
-       	_units = [_filter] call FHQ_fnc_ttiFilterUnits;
+{
+    private _list = [];
+   	for [{_i = 0}, {_i < count _tasks}, {_i = _i + 1}] do {
+        private _current = _tasks select _i;		// [_filter, [_section, _subject, _text]]
+
+        private _filter = _current select 0;
+       	private _units = [_filter] call FHQ_fnc_ttiFilterUnits;
             
 	    if (_x in _units) then {
-			_record = _current select 1;
         	_list = _list + [_current select 1];
         };
     };
         
     /* Now add them in reverse order */
-    _existing = _x getVariable ["FHQ_TTI_ClientTaskList", []];
+    private _existing = _x getVariable ["FHQ_TTI_ClientTaskList", []];
     if (FHQ_TTI_is_arma3) then {
        	for [{_i = 0}, {_i < count _list}, {_i = _i + 1}] do {
-            private ["_current"];
-            
-           	_current = _list select _i;
+
+           	private _current = _list select _i;
             
            	_existing = [_current, _existing, _x] call FHQ_fnc_ttiCreateOrUpdateTask;
 		}; 
 	} else {
         for [{_i = count _list - 1}, {_i >= 0}, {_i = _i - 1}] do {
 	        private ["_current", "_task", "_name"];
-           	_current = _list select _i;
+           	private _current = _list select _i;
                                                     
             /* Check for a parent task. Since we add them reversed in Arma 2, we need
              * to check if a parent task is "below" us
              */
-            _task = _current call FHQ_fnc_ttiGetTaskId;
+            private _task = _current call FHQ_fnc_ttiGetTaskId;
             if (typename _task == "ARRAY") then {
                 /* It's a task with parent */
-                _name = _task select 1;
-           		_idx = [_existing, _name] call FHQ_fnc_ttiTaskExists; 
+                private _name = _task select 1;
+           		private _idx = [_existing, _name] call FHQ_fnc_ttiTaskExists; 
                 if (_idx == -1) then {
                     /* Doesn't exist... so go through it and create the task now */
                     private ["_j"];

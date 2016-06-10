@@ -6,7 +6,7 @@
 #define FHQ_TTIF_TASKSTATE	5
 
 /* Might not be present */
-_res = "created";
+private _res = "created";
     
 if (count _this > FHQ_TTIF_TASKSTATE) then {
     _res = _this select FHQ_TTIF_TASKSTATE;

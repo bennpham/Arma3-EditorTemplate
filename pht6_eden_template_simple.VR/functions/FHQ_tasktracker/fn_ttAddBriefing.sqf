@@ -55,13 +55,12 @@ if (isServer) then {
 		
     	_current = _this select _i;
     		
-        if (typename _current == "ARRAY") then {
-            /* It's a briefing entry. */
-            [_currentFilter, _current] call FHQ_fnc_ttiAddBriefingEntry;
-        } else {
-            /* Must be a filter */
+        if (_current call FHQ_fnc_ttiIsFilter) then {
             _currentFilter = nil; 
             _currentFilter = _current;
+        } else {
+			/* It's a briefing entry. */
+            [_currentFilter, _current] call FHQ_fnc_ttiAddBriefingEntry;
         };
 	};
 

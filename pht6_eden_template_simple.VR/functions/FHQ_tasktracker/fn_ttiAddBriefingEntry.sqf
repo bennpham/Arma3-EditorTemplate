@@ -5,14 +5,14 @@
  * select 1: [_section, _subject, _text]
  */
 
-private ["_record", "_filter", "_subject", "_topic", "_text"];
-_record = [_this, 1] call BIS_fnc_param;
-_filter = [_this, 0] call BIS_fnc_param;
+private _record = [_this, 1] call BIS_fnc_param;
+private _filter = [_this, 0] call BIS_fnc_param;
     
-_subject = "Diary";
-_topic = _record select 0;
-_text = _record select 1;
-if (count _this == 3) then {
+private _subject = "Diary";
+private _topic = _record select 0;
+private _text = _record select 1;
+
+if (count _record == 3) then {
   	_subject = _record select 0;
    	_topic = _record select 1;
    	_text = _record select 2;

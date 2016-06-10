@@ -32,6 +32,7 @@ if (_idx != -1) then {
 	}; 
 } else {
 	_taskID = _current call FHQ_fnc_ttiGetTaskId;
+    
     if (typename _taskID == "STRING") then {            
 		_object = _unit createSimpleTask [_name];
     } else {
@@ -59,7 +60,13 @@ if (_idx != -1) then {
 			_object setSimpleTaskTarget [_target, true];
 		};
 	};
-        
+    
+    private _taskType = _current call FHQ_fnc_ttiGetTaskType;
+
+    if (_taskType != "" && FHQ_TTI_version > 156) then {
+        [_object, _taskType] call compile "(_this select 0) setSimpleTaskType (_this select 1);"
+    };
+    
     _target = nil;
                 
     _object setTaskState _state;

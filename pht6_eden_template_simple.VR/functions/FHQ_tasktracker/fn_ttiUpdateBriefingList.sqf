@@ -9,7 +9,7 @@ _notify = false;
         _current = _briefing select _i;		// [_filter, [_section, _subject, _text]]
 
         _filter = _current select 0;
-       	_units = [_filter] call FHQ_fnc_ttifilterUnits;
+       	_units = [_filter] call FHQ_fnc_ttiFilterUnits;
             
         if (_x in _units) then {
 			_record = _current select 1;
@@ -21,7 +21,7 @@ _notify = false;
     _existing = _x getVariable ["FHQ_TTI_ClientBriefingList", []];
 	for [{_i = count _list - 1}, {_i >= 0}, {_i = _i - 1}] do {
         _current = _list select _i;
-            
+
         if (!([_existing, _current] call FHQ_fnc_ttiHasBriefingEntry)) then {
 			/* Check if the section exists and create it if necessary, then add the record */
     		if (!(_x diarySubjectExists (_current select 0))) then {

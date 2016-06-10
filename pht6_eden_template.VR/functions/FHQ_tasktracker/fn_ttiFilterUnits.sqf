@@ -34,6 +34,11 @@ switch (typename _filter) do
         // Filer out all objects not belonging to the faction
         {if (faction _x == _filter) then {_outputArray = _outputArray + [_x];};} forEach _unitsArray;
     };
+    case "ARRAY":
+    {
+        // Result is the input
+        _outputArray = _filter;
+    }
 };
     
 _outputArray;

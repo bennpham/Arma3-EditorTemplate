@@ -1,4 +1,4 @@
-version=51;
+version=52;
 class EditorData
 {
 	moveGridStep=1;
@@ -25,11 +25,45 @@ class EditorData
 binarizationWanted=0;
 addons[]=
 {
+	"A3_Ui_F",
 	"A3_Weapons_F_Ammoboxes",
 	"A3_Soft_F_MRAP_02",
-	"A3_Characters_F_BLUFOR",
-	"a3_characters_f",
-	"A3_Characters_F_INDEP"
+	"A3_Characters_F"
+};
+class AddonsMetaData
+{
+	class List
+	{
+		items=4;
+		class Item0
+		{
+			className="A3_Ui_F";
+			name="Arma 3 - User Interface";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+		class Item1
+		{
+			className="A3_Weapons_F";
+			name="Arma 3 Alpha - Weapons and Accessories";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+		class Item2
+		{
+			className="A3_Soft_F";
+			name="Arma 3 Alpha - Unarmored Land Vehicles";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+		class Item3
+		{
+			className="A3_Characters_F";
+			name="Arma 3 Alpha - Characters and Clothing";
+			author="Bohemia Interactive";
+			url="http://www.arma3.com";
+		};
+	};
 };
 randomSeed=8376959;
 class ScenarioData
@@ -54,6 +88,25 @@ class CustomAttributes
 	{
 		name="Multiplayer";
 		class Attribute0
+		{
+			property="RespawnButton";
+			expression="true";
+			class Value
+			{
+				class data
+				{
+					class type
+					{
+						type[]=
+						{
+							"SCALAR"
+						};
+					};
+					value=1;
+				};
+			};
+		};
+		class Attribute1
 		{
 			property="RespawnTemplates";
 			expression="true";
@@ -100,25 +153,6 @@ class CustomAttributes
 							};
 						};
 					};
-				};
-			};
-		};
-		class Attribute1
-		{
-			property="RespawnButton";
-			expression="true";
-			class Value
-			{
-				class data
-				{
-					class type
-					{
-						type[]=
-						{
-							"SCALAR"
-						};
-					};
-					value=1;
 				};
 			};
 		};
@@ -321,6 +355,7 @@ class Mission
 				position[]={3974.2957,5.1887245,4342.9824};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=1;
@@ -339,6 +374,7 @@ class Mission
 				angles[]={0,4.712389,0};
 			};
 			side="Empty";
+			flags=4;
 			class Attributes
 			{
 				skill=1;
@@ -362,7 +398,7 @@ class Mission
 						position[]={4000.2192,5.0014391,4299.6802};
 					};
 					side="West";
-					flags=2;
+					flags=6;
 					class Attributes
 					{
 						skill=1;
@@ -383,6 +419,7 @@ class Mission
 						position[]={3986.7231,5.0014391,4292.7246};
 					};
 					side="West";
+					flags=4;
 					class Attributes
 					{
 						skill=1;
@@ -402,6 +439,7 @@ class Mission
 						position[]={4001.2415,5.0014391,4285.9736};
 					};
 					side="West";
+					flags=4;
 					class Attributes
 					{
 						skill=1;
@@ -420,6 +458,7 @@ class Mission
 						position[]={4014.124,5.0014391,4292.3154};
 					};
 					side="West";
+					flags=4;
 					class Attributes
 					{
 						skill=1;
@@ -450,7 +489,7 @@ class Mission
 						position[]={4099.9512,5.0014391,4399.1187};
 					};
 					side="Independent";
-					flags=2;
+					flags=6;
 					class Attributes
 					{
 						rank="SERGEANT";
@@ -467,6 +506,7 @@ class Mission
 						position[]={4104.9512,5.0014391,4394.1187};
 					};
 					side="Independent";
+					flags=4;
 					class Attributes
 					{
 						skill=0.44999999;
@@ -483,6 +523,7 @@ class Mission
 						position[]={4094.9512,5.0014391,4394.1187};
 					};
 					side="Independent";
+					flags=4;
 					class Attributes
 					{
 						skill=0.40000001;
@@ -498,6 +539,7 @@ class Mission
 						position[]={4109.9521,5.0014391,4389.1187};
 					};
 					side="Independent";
+					flags=4;
 					class Attributes
 					{
 						skill=0.40000001;
@@ -526,7 +568,7 @@ class Mission
 						position[]={3902.3337,5.0014391,4396.9653};
 					};
 					side="Independent";
-					flags=2;
+					flags=6;
 					class Attributes
 					{
 						rank="SERGEANT";
@@ -543,6 +585,7 @@ class Mission
 						position[]={3907.3337,5.0014391,4391.9653};
 					};
 					side="Independent";
+					flags=4;
 					class Attributes
 					{
 						skill=0.44999999;
@@ -559,6 +602,7 @@ class Mission
 						position[]={3897.3337,5.0014391,4391.9653};
 					};
 					side="Independent";
+					flags=4;
 					class Attributes
 					{
 						skill=0.40000001;
@@ -574,6 +618,7 @@ class Mission
 						position[]={3912.3337,5.0014391,4386.9653};
 					};
 					side="Independent";
+					flags=4;
 					class Attributes
 					{
 						skill=0.40000001;
